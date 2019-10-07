@@ -83,19 +83,25 @@ var sumBelow = function(n) {
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
-var range = function(x, y) {
-    if(!result){
-        var result = []
-    } if(x === (y - 1)){
-        return null
-    } else {
-        ++x;
-        result.push(x);
-        return range(x);
-    }
+    var range = function(x,y){
+        if(x === y || x === y + 1 || x === y - 1){
+            return [];
+          }
+        if(x > y + 2){
+          return [x - 1].concat(range(x - 1, y));
+        }
+        if(x > y + 1){
+          return [x - 1];
+        }
+        if(x < y - 2){
+          return [x + 1].concat(range(x + 1, y));
+        }
+        if(x < y - 1){
+          return [x + 1];
+        }
+      };
 
     // terminate recursion upon reaching y - 1
-};
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -106,34 +112,47 @@ var exponent = function(base, exp) {
     if(exp === 0){
         return 1;
     }
-    if(exp === 1){
-        return base;
-    } 
-    if(exp === -1){
-      return 1/base
+    if(exp > 0){
+        return base * exponent(base, exp - 1)
     }
     if(exp < 0){
         return (1/base) * exponent(base, exp + 1)
     }
-    else {
-        return base * exponent(base,exp - 1)
-    }
-};
+}
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
-
+    if(n === 1){
+        return true;
+    }
+    if(n > 1){
+        return powerOfTwo(n/2)
+    
+    } 
+    return false
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+    if(string.length === 1){
+      return string[0]
+    }
+    return string[string.length -1] + reverse(string.slice(0,-1))
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+    string.split(' ').join('')
+    if(string.length === 0){
+        return true
+    }
+    if(string[0].toUpperCase() === string[string.length - 1].toUpperCase()){
+        return palindrome(string.slice(1,-1))
+    }
+    return false
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -141,17 +160,92 @@ var palindrome = function(string) {
 // modulo(5,2) // 1
 // modulo(17,5) // 2
 // modulo(22,6) // 4
+// modulo(5, -2)
 var modulo = function(x, y) {
+    if(x === 0 && y === 0){
+      return NaN
+    }
+    if(x > 0 && y < 0 && x + y >= 0){
+        return modulo(x + y,y);
+    }
+    if(x > 0 && y > 0 && x - y >= 0){
+        return modulo(x - y,y);
+    }
+    if(x < 0 && y < 0 && x - y <= 0){
+        return modulo(x - y,y);
+    }
+    if(x < 0 && y > 0 && x + y <= 0){
+        return modulo(x + y,y);
+    }
+    return x
+
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
-var multiply = function(x, y) {
-};
+// 1,1 = 1
 
+// 1,-1 = -1
+
+// -1,-1 = 1
+
+// -1,1 = -1
+
+// 5,5 = 25
+
+var multiply = function(x, y) {
+    if (x === 0 || y === 0) {
+        return 0;
+    }
+    if (x < 0 && y < 0){
+        return multiply (-x,-y);
+    }
+    if (x < 0 && y > 0 ){
+        return -multiply (-x,y);
+    }
+    if (x > 0 && y < 0) {
+        return -multiply(x,-y);
+    }
+    if (x === 1 && y === 1) {
+        return 0;
+    }
+    if (x === 1) {
+        return y;
+    }
+    if (y === 1) {
+        return x;
+    }
+    if ( x > 0 && y > 0) {
+        return x + multiply (x,y-1);
+    }
+};
+ 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
 var divide = function(x, y) {
+  if (x === 0 && y === 0){
+    return NaN
+  }
+  if (x === 0 || y === 0) {
+    return 0;
+  }
+  if (x < 0 && y < 0){
+      return divide (-x,-y);
+  }
+  if (x < 0 && y > 0 ){
+      return -divide (-x,y);
+  }
+  if (x > 0 && y < 0) {
+      return -divide(x,-y);
+  }
+  if (x === 1 && y === 1) {
+      return 1;
+  }
+  if (x < y) {
+    return 0
+  } else {
+    return 1 + divide(x-y,y)
+  }
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
@@ -160,6 +254,7 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) {
+  
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
